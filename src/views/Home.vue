@@ -11,6 +11,23 @@
     <p class="card-text">Welcom to bootstrap card styles</p>
     <a href="#" class="btn btn-primary">Submit</a>
         </div>   -->
+        <section class="page-section bg-whitee text-color mb-0" id="about">
+            <div class="container">
+                <!-- About Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-color">About us</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+                <div class="row">
+                    <div class="col-lg-4 ms-auto" style="color:black"><p class="lead">We enable you to find a party at the desired location right now. There are a bunch of people here who want to party just like you, don't miss the chance!</p></div>
+                    <div class="col-lg-4 me-auto" style="color:black"><p class="lead">Connect with others, meet some people and find the craziest party yet!</p></div>
+                </div>
+            </div>
+        </section>
         <div class="row-container">
         <div class="row row-color">
             <div class="col-md-3 col-sm-6 item">
@@ -60,25 +77,6 @@
 
             </div>
         </header>
-        <!-- About Section-->
-        <section class="page-section bg-whitee text-color mb-0" id="about">
-            <div class="container">
-                <!-- About Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-color">About</h2>
-                <!-- Icon Divider-->
-                <div class="divider-custom divider-light">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                    <div class="divider-custom-line"></div>
-                </div>
-                <!-- About Section Content-->
-                <div class="row">
-                    <div class="col-lg-4 ms-auto" style="color:black"><p class="lead">Freelancer is a free bootstrap theme created by Start Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p></div>
-                    <div class="col-lg-4 me-auto" style="color:black"><p class="lead">You can create your own custom avatar for the masthead, change the icon in the dividers, and add your email address to the contact form to make it fully functional!</p></div>
-                </div>
-            </div>
-        </section>
-        <!-- Contact Section-->
         
         <!-- Footer-->
         <footer class="footer text-center">

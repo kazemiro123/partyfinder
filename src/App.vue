@@ -10,13 +10,77 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item mx-0 mx-lg-1"><router-link to="/" class="nav-link py-3 px-0 px-lg-3 rounded" href="#portfolio">Home</router-link></li>
                         <li class="nav-item mx-0 mx-lg-1"><router-link to="/make_party" class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">Make a party</router-link></li>
-                        <li class="nav-item mx-0 mx-lg-1"><router-link to="/login" class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Login</router-link></li>
+                        <li v-if="!currentUser" class="nav-item mx-0 mx-lg-1"><router-link to="/login" class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Login</router-link></li>
+                        <li v-if="currentUser" class="mx-0 mx-lg-1 py-3 px-0 px-lg-3 rounded" style="color:black">Your email: <p style="text-transform:none;display:inline;color:black">{{currentUser}}</p></li>
+                        <li v-if="currentUser" @click.prevent="SignOut()" class="nav-item mx-0 mx-lg-1" style="color:#1e88e5"><router-link to="" class="nav-link py-3 px-0 px-lg-3 rounded">Logout</router-link></li>
                     </ul>
                 </div>
             </div>
         </nav>
   <router-view/>
 </template>
+
+<script>
+import { firebase, db } from '@/firebase'
+import router from '@/router';
+export default{
+  data: function () {
+    return {
+      currentUser:false,
+    };
+  },
+  methods: {
+    SignOut() {
+			firebase.auth().signOut().then(() =>{
+				this.$router.go()
+			})
+    	},
+	},
+  
+  mounted() {
+    console.log(this.currentUser)
+      firebase.auth().onAuthStateChanged((user) => {
+        const currentRoute = router.currentRoute;
+        let email;
+
+        if (user) {
+          console.log("Current user: ", user.email)
+          db.collection("User")
+            .doc(user.email)
+            .get()
+            .then(function(doc) {
+                if (doc.exists) {
+                    const data = doc.data();
+                    console.log(data)
+                    user.email = data.Email
+                    
+                    console.log("Email: ", user.email)
+                } 
+                else {
+                    console.log("No such document!");
+                }
+                
+                })
+                .catch(function(error) {
+                    console.log("Error getting document:", error);
+                });
+                this.currentUser = user.email;
+                console.log("current user and full naem", this.currentUser)
+        } 
+        else {
+            console.log("No user!");
+            this.currentUser = null;
+        /*if(currentRoute.meta.needsUser){
+            router.push({name:'prijava'});
+        }*/
+        }
+      });
+  }
+
+  };
+
+</script>
+
 
 <style lang="scss">
 

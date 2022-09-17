@@ -5,10 +5,10 @@
         
         <form class="form-signin">
             <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Sign in</h1>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+            <input v-model="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+            <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
             
-            <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+            <button class="btn btn-success btn-block" type="submit" @click.prevent="login()"><i class="fas fa-sign-in-alt"></i> Sign in</button>
             <hr>
             <!-- <p>Don't have an account!</p>  -->
             <router-link to="/register"><button class="btn btn-primary btn-block" type="button" id="btn-signup"><i class="fas fa-user-plus"></i> Sign up New Account</button></router-link>
@@ -17,6 +17,34 @@
     </div>        
 </div>
 </template>
+
+<script>
+import { firebase, db } from '@/firebase';
+
+export default{
+    data: function () {
+        return {
+        email:"",
+        password:"",
+        };
+    },
+    methods: {
+        login () {
+            console.log("ulaz")
+            console.log('Login: '+ this.email);
+            console.log(this.$router);
+            firebase.auth().signInWithEmailAndPassword(this.email, this.password) .then( (result) => {
+                console.log('Successful login! ', result);
+                this.$router.replace({ path: '/'})
+            })
+            .catch(function (e) {
+                console.error('Greška',e);
+            });
+        }
+    }
+}
+</script>
+
 
 <style scoped>
 
