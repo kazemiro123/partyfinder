@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Pocetna.vue'
+import Home from '../views/Home.vue'
 
 const routes = [
   {
@@ -16,6 +16,16 @@ const routes = [
     path: '/make_party',
     name: 'make_party',
     component: () => import(/* webpackChunkName: "about" */ '../views/MakeParty.vue')
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/Login.vue')
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/Register.vue')
   }
 ]
 
