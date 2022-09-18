@@ -4,13 +4,14 @@
     <div id="logreg-forms">
         <h1>Sign Up</h1>
         <form class="form-signup">
-                <input v-model="full_name" type="text" id="user-name" class="form-control" placeholder="Full name" required="" autofocus="">
-                <input v-model="email" type="email" id="user-email" class="form-control" placeholder="Email address" required autofocus="">
-                <input v-model="password" type="password" id="user-pass" class="form-control" placeholder="Password" required autofocus="">
+                <input v-model="full_name" type="text" id="user-name" class="form-control" placeholder="Full name">
+                <input v-model="email" type="email" id="user-email" class="form-control" placeholder="Email address">
+                <input v-model="password" type="password" id="user-pass" class="form-control" placeholder="Password">
                 <input v-model="repeat_pass" type="password" id="user-repeatpass" class="form-control" placeholder="Repeat Password" required autofocus="">
                 <p style="color:green" v-if="authSucces">Successfuly registered!</p>
                 <p style="color:red" v-else>You are not registered.</p>
                 <button @click.prevent="registerUser()" class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
+                <p style="color:red" v-if="errorMessage">Passwords do not match.</p>
                 <router-link to="/login" id="cancel_signup"><i class="fas fa-angle-left"></i> Login</router-link>
         </form>       
     </div>
@@ -28,11 +29,14 @@ export default{
             password: "",
             repeat_pass: "",
             authSucces: false,
+            errorMessage: false,
         }
     },
     methods: {
         registerUser(){
             console.log("Check if firebase exists: ",firebase)
+            if(this.password===this.repeat_pass)
+            {
             try {
                     firebase.auth().createUserWithEmailAndPassword(this.email, this.password);
                     const singleMail = this.email;
@@ -41,12 +45,15 @@ export default{
                     .set({
                         FullName: this.full_name,
                         Email: this.email,
-                        Password: this.password,
-                        RepeatPassword: this.repeat_pass
+                        Password: this.password
                     });
                     this.authSucces = true;
             }
             catch(error) {}
+            }
+            else{
+                this.errorMessage=true;
+            }
         }
     }
 }

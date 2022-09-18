@@ -4,66 +4,115 @@
             <div class="container">
                 <!-- Contact Section Heading-->
                 <h2 style="color:#1e88e5;" class="page-section-heading text-center text-uppercase mb-0">Make a party</h2>
-                <!-- Icon Divider-->
-                <div class="divider-custom">
+                <!-- Icon Divider-->   <div class="divider-custom">
                     <div class="divider-custom-line"></div>
                     <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                     <div class="divider-custom-line"></div>
                 </div>
-                <!-- Contact Section Form-->
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-xl-7">
                         <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                            <!-- Name input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
-                                <label for="name">Full name</label>
-                                <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                                <input v-model="party_name" class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                                <label for="name">Party name</label>
                             </div>
-                            <!-- Email address input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
-                                <label for="email">Email address</label>
-                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
-                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                                <input v-model="party_location" class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
+                                <label for="location">Party location</label>
                             </div>
-                            <!-- Phone number input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
-                                <label for="phone">Phone number</label>
-                                <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
+                                <input v-model="img_url" class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
+                                <label for="image">Party image</label>
                             </div>
+                                <form class="form-inline" role="form">
+                                    <div class="form-group">
+                                    <label class="control-label">People expected: </label>
+                                    </div>
+                                    <div class="form-group">
+                                    <div class="radio" style="margin-left:15px">
+                                        <label class="radio-inline control-label">
+                                        <input type="radio" id="amount_25" name="amount" checked="" v-model="amount_50">
+                                        50
+                                        </label>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <div class="radio" style="margin-left:15px">
+                                        <label class="radio-inline control-label">
+                                        <input type="radio" id="amount_50" name="amount" v-model="amount_150">
+                                        150
+                                        </label>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <div class="radio" style="margin-left:15px">
+                                        <label class="radio-inline control-label">
+                                        <input type="radio" id="amount_100" name="amount" v-model="amount_300">
+                                        300+
+                                        </label>
+                                    </div>
+                                    </div>
+                                </form>
                             <!-- Message input-->
-                            <div class="form-floating mb-3">
+                            <!--<div class="form-floating mb-3">
                                 <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
                                 <label for="message">Message</label>
-                                <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
-                            </div>
-                            <!-- Submit success message-->
-                            <!---->
-                            <!-- This is what your users will see when the form-->
-                            <!-- has successfully submitted-->
-                            <div class="d-none" id="submitSuccessMessage">
-                                <div class="text-center mb-3">
-                                    <div class="fw-bolder">Form submission successful!</div>
-                                    To activate this form, sign up at
-                                    <br />
-                                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
-                                </div>
-                            </div>
-                            <!-- Submit error message-->
-                            <!---->
-                            <!-- This is what your users will see when there is-->
-                            <!-- an error submitting the form-->
+                            </div>-->
                             <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-                            <!-- Submit Button-->
-                            <button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">Send</button>
+                            <button class="btn btn-primary btn-xl" @click.prevent="sendPartyData()" style="margin-top:20px" id="submitButton">Send</button>
                         </form>
                     </div>
                 </div>
             </div>
         </section>
 </template>
+
+<script>
+import store from '@/store.js'
+import { firebase, db } from '@/firebase.js'
+export default{
+    data:function(){
+        return{
+            store,
+            party_name:"",
+            party_location:"",
+            img_url:"",
+            amount_50:"",
+            amount_150:"",
+            amount_300:""
+        }
+    },
+    methods:{
+        sendPartyData(){
+            console.log("trying",store.currentUserEmail)
+            let selected_amount
+            if(this.amount_50!=""){
+                selected_amount="50";
+            }
+            else if(this.amount_150!=""){
+                selected_amount="150";
+            }
+            else if(this.amount_300!=""){
+                selected_amount="300+";
+            }
+            try {
+                console.log(this.party_name,this.party_location,this.img_url,store.currentUserEmail,selected_amount)
+                db.collection("party")
+                    .doc()
+                    .set({
+                        party_name: this.party_name,
+                        party_location: this.party_location,
+                        img_url: this.img_url,
+                        userEmail: store.currentUserEmail,
+                        selected_amount: selected_amount
+                    });
+            }
+            catch(error) {}
+        }
+    }
+}
+</script>
+
 
 <style scoped>
 

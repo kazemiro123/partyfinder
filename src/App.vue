@@ -23,10 +23,12 @@
 <script>
 import { firebase, db } from '@/firebase'
 import router from '@/router';
+import store from '@/store'
 export default{
   data: function () {
     return {
       currentUser:false,
+      store
     };
   },
   methods: {
@@ -41,7 +43,6 @@ export default{
     console.log(this.currentUser)
       firebase.auth().onAuthStateChanged((user) => {
         const currentRoute = router.currentRoute;
-        let email;
 
         if (user) {
           console.log("Current user: ", user.email)
@@ -52,9 +53,6 @@ export default{
                 if (doc.exists) {
                     const data = doc.data();
                     console.log(data)
-                    user.email = data.Email
-                    
-                    console.log("Email: ", user.email)
                 } 
                 else {
                     console.log("No such document!");
@@ -65,7 +63,9 @@ export default{
                     console.log("Error getting document:", error);
                 });
                 this.currentUser = user.email;
-                console.log("current user and full naem", this.currentUser)
+                console.log("current user: ", this.currentUser)
+                //Passing to store
+                store.currentUserEmail = this.currentUser
         } 
         else {
             console.log("No user!");
