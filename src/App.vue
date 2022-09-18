@@ -18,19 +18,24 @@
             </div>
         </nav>
   <router-view/>
+  <Footer />
 </template>
 
 <script>
 import { firebase, db } from '@/firebase'
 import router from '@/router';
 import store from '@/store'
+import Footer from '@/components/footer.vue'
 export default{
   data: function () {
     return {
       currentUser:false,
       store
     };
-  },
+      },
+      components:{
+      Footer
+    },
   methods: {
     SignOut() {
 			firebase.auth().signOut().then(() =>{
@@ -43,7 +48,7 @@ export default{
     console.log(this.currentUser)
       firebase.auth().onAuthStateChanged((user) => {
         const currentRoute = router.currentRoute;
-
+  
         if (user) {
           console.log("Current user: ", user.email)
           db.collection("User")
@@ -66,10 +71,12 @@ export default{
                 console.log("current user: ", this.currentUser)
                 //Passing to store
                 store.currentUserEmail = this.currentUser
+                store.currentUser = true;
         } 
         else {
             console.log("No user!");
             this.currentUser = null;
+            store.currentUser = false;
         /*if(currentRoute.meta.needsUser){
             router.push({name:'prijava'});
         }*/

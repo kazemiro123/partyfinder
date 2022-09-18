@@ -1,3 +1,5 @@
 export default{
-    currentUserEmail:null
+    currentUserEmail:null,
+    matchedPartyData:{},
+    currentUser: false
 }

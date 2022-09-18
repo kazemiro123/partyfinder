@@ -62,6 +62,7 @@
                             <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                             <button class="btn btn-primary btn-xl" @click.prevent="sendPartyData()" style="margin-top:20px" id="submitButton">Send</button>
                         </form>
+                        <br><br><br>
                     </div>
                 </div>
             </div>
