@@ -32,10 +32,13 @@
         <div class="row row-color">
             <div v-for="party in partyData" :key="party.id" class="col-md-3 col-sm-6 item">
                 <div class="card item-card card-block">
-                <h4 class="card-title text-right"><i class="material-icons">{{party.party_location}}</i></h4>
+                <h4 class="card-title text-right"><i class="material-icons">Destination: {{party.party_location}}</i></h4>
                 <img :src="party.img_url">
                     <h5 class="item-card-title mt-3 mb-3">{{party.party_name}}</h5>
-                    <p class="card-text">{{party.party_desc}}</p> 
+                    <p>Posted by: {{party.userEmail}}</p> 
+                    <p class="card-text">{{party.party_desc}}</p>
+                    <p style="font-style: italic;font-size:10px">Posted by: {{party.userEmail}}</p> 
+                    <button class="btn btn-xl" @click.prevent="connectToParty(party.party_name, party.party_desc, party.userEmail, party.party_location)" style="margin-top:20px;background-color:#1e88e5" id="submitButton">Connect to a party</button>
                 </div>
             </div>
         </div>
@@ -300,8 +303,9 @@ export default {
                     this.partyData.push({
                         party_name: data.party_name,
                         party_location: data.party_location,
+                        party_desc: data.party_desc,
                         img_url: data.img_url,
-                        userEmail: data.currentUserEmail,
+                        userEmail: data.userEmail,
                         selected_amount: data.selected_amount
                     })
                     console.log("party data: ",this.partyData)
@@ -309,6 +313,10 @@ export default {
                 });
             });
         },
+        connectToParty(name, desc, email, location){
+          let partyData = { partyName:name, partyDesc:desc, partyEmail:email, partyLocation:location }
+          console.log("Data from button: ",partyData)
+        }
     },
     mounted(){
       this.fetchPartyInfo();
@@ -349,6 +357,10 @@ export default {
 }
 .card-text{
   height:80px;  
+}
+
+.btn-color{
+  background-color:red;
 }
 
 .card::before, .card::after {
