@@ -30,46 +30,14 @@
         </section>
         <div class="row-container">
         <div class="row row-color">
-            <div class="col-md-3 col-sm-6 item">
+            <div v-for="party in partyData" :key="party.id" class="col-md-3 col-sm-6 item">
                 <div class="card item-card card-block">
-                <h4 class="card-title text-right"><i class="material-icons">settings</i></h4>
-                <img src="@/assets/party.jpg" alt="Photo of sunset">
-                    <h5 class="item-card-title mt-3 mb-3">Sierra Web Development • Owner</h5>
-                    <p class="card-text">This is a company that builds websites, web apps and e-commerce solutions.</p> 
+                <h4 class="card-title text-right"><i class="material-icons">{{party.party_location}}</i></h4>
+                <img :src="party.img_url">
+                    <h5 class="item-card-title mt-3 mb-3">{{party.party_name}}</h5>
+                    <p class="card-text">{{party.party_desc}}</p> 
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 item">
-                <div class="card item-card card-block">
-                <h4 class="card-title text-right"><i class="material-icons">settings</i></h4>
-                <img src="@/assets/party.jpg" alt="Photo of sunset">
-                    <h5 class="card-title  mt-3 mb-3">ProVyuh</h5>
-                    <p class="card-text">This is a company that builds websites, web .</p> 
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6 item">
-                <div class="card item-card card-block">
-                <h4 class="card-title text-right"><i class="material-icons">settings</i></h4>
-                <img src="@/assets/party.jpg" alt="Photo of sunset">
-                    <h5 class="card-title  mt-3 mb-3">ProVyuh</h5>
-                    <p class="card-text">This is a company that builds websites, web apps and e-commerce solutions.</p> 
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6 item">
-                <div class="card item-card card-block">
-                <h4 class="card-title text-right"><i class="material-icons">settings</i></h4>
-                <img src="@/assets/party.jpg" alt="Photo of sunset">
-                    <h5 class="card-title  mt-3 mb-3">ProVyuh</h5>
-                    <p class="card-text">This is a company that builds websites, web apps and e-commerce solutions.</p> 
-                </div>
-            </div>    
-            <div class="col-md-3 col-sm-6 item">
-                <div class="card item-card card-block">
-                <h4 class="card-title text-right"><i class="material-icons">settings</i></h4>
-                <img src="@/assets/party.jpg" alt="Photo of sunset">
-                    <h5 class="card-title  mt-3 mb-3">ProVyuh</h5>
-                    <p class="card-text">This is a company that builds websites, web apps and e-commerce solutions.</p> 
-                </div>
-            </div>    
         </div>
         </div>
   
@@ -310,6 +278,44 @@
         </div>
   </div>
 </template>
+
+<script>
+import { db } from '@/firebase.js'
+
+export default {
+  data:function(){
+    return{
+      partyData:[]
+    }
+  },
+  methods:{
+         fetchPartyInfo() {
+            console.log("firebase dohvat");
+            db.collection("party")
+            .get()
+            .then((query) => {
+                query.forEach((doc) => {
+                    const data = doc.data();
+                    console.log(data);
+                    this.partyData.push({
+                        party_name: data.party_name,
+                        party_location: data.party_location,
+                        img_url: data.img_url,
+                        userEmail: data.currentUserEmail,
+                        selected_amount: data.selected_amount
+                    })
+                    console.log("party data: ",this.partyData)
+                    
+                });
+            });
+        },
+    },
+    mounted(){
+      this.fetchPartyInfo();
+    }
+}
+</script>
+
 
 <style scoped>
 
@@ -4010,14 +4016,3 @@ html {
 }
 </style>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
-</script>

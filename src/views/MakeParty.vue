@@ -24,6 +24,10 @@
                                 <input v-model="img_url" class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
                                 <label for="image">Party image</label>
                             </div>
+                            <div class="form-floating mb-3">
+                                <textarea v-model="party_desc" class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
+                                <label for="message">Message</label>
+                            </div>
                                 <form class="form-inline" role="form">
                                     <div class="form-group">
                                     <label class="control-label">People expected: </label>
@@ -54,10 +58,7 @@
                                     </div>
                                 </form>
                             <!-- Message input-->
-                            <!--<div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
-                                <label for="message">Message</label>
-                            </div>-->
+                            <!---->
                             <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                             <button class="btn btn-primary btn-xl" @click.prevent="sendPartyData()" style="margin-top:20px" id="submitButton">Send</button>
                         </form>
@@ -77,6 +78,7 @@ export default{
             party_name:"",
             party_location:"",
             img_url:"",
+            party_desc:"",
             amount_50:"",
             amount_150:"",
             amount_300:""
@@ -103,6 +105,7 @@ export default{
                         party_name: this.party_name,
                         party_location: this.party_location,
                         img_url: this.img_url,
+                        party_desc: this.party_desc,
                         userEmail: store.currentUserEmail,
                         selected_amount: selected_amount
                     });
