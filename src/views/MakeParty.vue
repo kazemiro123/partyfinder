@@ -26,7 +26,7 @@
                             </div>
                             <div class="form-floating mb-3">
                                 <textarea v-model="party_desc" class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
-                                <label for="message">Message</label>
+                                <label for="message">Description</label>
                             </div>
                                 <form class="form-inline" role="form">
                                     <div class="form-group">
@@ -57,11 +57,14 @@
                                     </div>
                                     </div>
                                 </form>
-                            <!-- Message input-->
-                            <!---->
+                                <div class="row">
+                                    <span class="fw-500">Party Date</span><br>
+                                    <input v-model="date" class="form-control input-lg" type="date" id="start" name="trip-start" min="2022-10-1" max="2023-12-31">
+                                </div>
                             <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                             <button class="btn btn-primary btn-xl" @click.prevent="sendPartyData()" style="margin-top:20px" id="submitButton">Send</button>
                         </form>
+                                
                         <br><br><br>
                     </div>
                 </div>
@@ -70,9 +73,12 @@
 </template>
 
 <script>
+
 import store from '@/store.js'
 import { firebase, db } from '@/firebase.js'
+
 export default{
+
     data:function(){
         return{
             store,
@@ -82,7 +88,8 @@ export default{
             party_desc:"",
             amount_50:"",
             amount_150:"",
-            amount_300:""
+            amount_300:"",
+            date:""
         }
     },
     methods:{
@@ -106,6 +113,7 @@ export default{
                         party_name: this.party_name,
                         party_location: this.party_location,
                         img_url: this.img_url,
+                        partyDate: this.date,
                         party_desc: this.party_desc,
                         userEmail: store.currentUserEmail,
                         selected_amount: selected_amount
@@ -114,7 +122,9 @@ export default{
             catch(error) {}
         }
     }
+    
 }
+
 </script>
 
 

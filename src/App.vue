@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
             <div class="container">
-                <img style="width:200px;height:70px" src="@/assets/PartyFinder-logo.png" />
+                <router-link to="/"><img style="width:200px;height:70px" src="@/assets/PartyFinder-logo.png" /></router-link>
                 <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
@@ -12,6 +12,7 @@
                         <li class="nav-item mx-0 mx-lg-1"><router-link to="/make_party" class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">Make a party</router-link></li>
                         <li v-if="!currentUser" class="nav-item mx-0 mx-lg-1"><router-link to="/login" class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Login</router-link></li>
                         <li v-if="currentUser" class="mx-0 mx-lg-1 py-3 px-0 px-lg-3 rounded" style="color:black">Your email: <p style="text-transform:none;display:inline;color:black">{{currentUser}}</p></li>
+                        <li v-if="currentUser" class="nav-item mx-0 mx-lg-1"><router-link to="/matched_party_list" class="nav-link py-3 px-0 px-lg-3 rounded">Party list</router-link></li>
                         <li v-if="currentUser" @click.prevent="SignOut()" class="nav-item mx-0 mx-lg-1" style="color:#1e88e5"><router-link to="" class="nav-link py-3 px-0 px-lg-3 rounded">Logout</router-link></li>
                     </ul>
                 </div>
@@ -77,9 +78,6 @@ export default{
             console.log("No user!");
             this.currentUser = null;
             store.currentUser = false;
-        /*if(currentRoute.meta.needsUser){
-            router.push({name:'prijava'});
-        }*/
         }
       });
   }

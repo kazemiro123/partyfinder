@@ -26,6 +26,11 @@ const routes = [
     path: '/matched_party',
     name: 'matched_party',
     component: () => import('../views/MatchedParty.vue')
+  },
+  {
+    path: '/matched_party_list',
+    name: 'matched_party_list',
+    component: () => import('../views/MatchedPartyList.vue')
   }
 ]
 
