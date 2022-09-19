@@ -28,22 +28,30 @@
             </div>
         </section>
         <div class="row-container">
-        <h2 class="page-section-heading text-center text-uppercase text-color">Find a party</h2>
+        <h2 class="page-section-heading text-center text-uppercase">Find a party</h2>
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>
                     <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                     <div class="divider-custom-line"></div>
                 </div>
+        <h5 style="color:black; font-style:italic">Note: you can search for a party by location or by name</h5>
+        <div class="input-group rounded" style="width:30%;display:inline-block">
+            <input type="search" v-model="searchParty" class="rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <span>
+              <i class="fas fa-search"></i>
+            </span><br><br>
+          </div>
         <div class="row row-color">
-            <div v-for="party in partyData" :key="party.id" class="col-md-3 col-sm-6 item">
+            <div v-for="party in filteredPartyData" :key="party.id" class="col-md-3 col-sm-6 item">
                 <div class="card item-card card-block">
                 <h4 class="card-title text-right"><i class="material-icons">Destination: {{party.party_location}}</i></h4>
                 <img :src="party.img_url">
                     <h5 class="item-card-title mt-3 mb-3">{{party.party_name}}</h5>
-                    <p>Posted by: {{party.userEmail}}</p> 
+                    <p>Party members expected: {{party.selected_amount}}</p> 
+                    <p>See you {{party.date}}</p> 
                     <p class="card-text">{{party.party_desc}}</p>
                     <p style="font-style: italic;font-size:10px">Posted by: {{party.userEmail}}</p> 
-                    <button class="btn btn-xl" @click.prevent="connectToParty(party.party_name, party.party_desc, party.userEmail, party.party_location, party.img_url)" style="margin-top:20px;background-color:#1e88e5" id="submitButton">Connect to a party</button>
+                    <button class="btn btn-xl" @click.prevent="MatchToParty(store.currentUserEmail,party.party_name,party.userEmail,party.party_location);connectToParty(party.party_name, party.party_desc, party.userEmail, party.party_location, party.img_url)" style="margin-top:20px;background-color:#1e88e5" id="submitButton">Connect to a party</button>
                 </div>
             </div>
         </div>
@@ -66,7 +74,8 @@ export default {
   data:function(){
     return{
       store,
-      partyData:[]
+      partyData:[],
+      searchParty:""
     }
   },
   methods:{
@@ -82,6 +91,7 @@ export default {
                         party_name: data.party_name,
                         party_location: data.party_location,
                         party_desc: data.party_desc,
+                        date: data.partyDate,
                         img_url: data.img_url,
                         userEmail: data.userEmail,
                         selected_amount: data.selected_amount
@@ -91,6 +101,19 @@ export default {
                 });
             });
         },
+        MatchToParty(currentUser, partyName, pairedUser, partyLocation){
+          try {
+                db.collection("MatchedParties")
+                    .doc()
+                    .set({
+                        currentUser: currentUser,
+                        partyName: partyName,
+                        pairedUser: pairedUser,
+                        partyLocation: partyLocation,
+                    });
+            }
+            catch(error) {}
+        },
         connectToParty(name, desc, email, location, img){
           let partyData = { partyName:name, partyDesc:desc, partyEmail:email, partyLocation:location, partyImg:img }
           store.matchedPartyData = partyData;
@@ -98,6 +121,20 @@ export default {
 
           this.$router.replace({ path:'/matched_party' })
         }
+    },
+    computed: {
+      filteredPartyData(){
+        let termin = this.searchParty;
+        let newParty = [];
+
+        for (let data of this.partyData){
+          if(data.party_name.indexOf(termin) >= 0 || data.party_location.indexOf(termin) >= 0) {
+            newParty.push(data);
+          }
+        }
+
+        return newParty;
+      }
     },
     mounted(){
       this.fetchPartyInfo();
