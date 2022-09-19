@@ -51,12 +51,11 @@
                     <p>See you {{party.date}}</p> 
                     <p class="card-text">{{party.party_desc}}</p>
                     <p style="font-style: italic;font-size:10px">Posted by: {{party.userEmail}}</p> 
-                    <button class="btn btn-xl" @click.prevent="MatchToParty(store.currentUserEmail,party.party_name,party.userEmail,party.party_location,party.date);connectToParty(party.party_name, party.party_desc, party.userEmail, party.party_location, party.img_url)" style="margin-top:20px;background-color:#1e88e5" id="submitButton">Connect to a party</button>
+                    <button class="btn btn-xl" @click.prevent="MatchToParty(store.currentUserEmail,party.party_name,party.userEmail,party.party_location,party.date, party.img_url, party.social_media);connectToParty(party.party_name, party.party_desc, party.userEmail, party.party_location, party.img_url)" style="margin-top:20px;background-color:#1e88e5" id="submitButton">Connect to a party</button>
                 </div>
             </div>
         </div>
         </div>
-  
 </div>
 
             </div>
@@ -69,6 +68,11 @@
 <script>
 import { db } from '@/firebase.js'
 import store from '@/store.js'
+let ime = "kazo";
+let auto = {
+  vrsta:"Audi",
+  vrata:4
+}
 
 export default {
   data:function(){
@@ -94,14 +98,15 @@ export default {
                         date: data.partyDate,
                         img_url: data.img_url,
                         userEmail: data.userEmail,
-                        selected_amount: data.selected_amount
+                        selected_amount: data.selected_amount,
+                        social_media: data.social_media
                     })
                     console.log("party data: ",this.partyData)
                     
                 });
             });
         },
-        MatchToParty(currentUser, partyName, pairedUser, partyLocation, partyDate){
+        MatchToParty(currentUser, partyName, pairedUser, partyLocation, partyDate, imgURL, socialMedia){
                 if(store.currentUser==true)
                 {
                 db.collection("MatchedParties")
@@ -112,6 +117,8 @@ export default {
                         pairedUser: pairedUser,
                         partyLocation: partyLocation,
                         partyDate: partyDate,
+                        imgURL: imgURL,
+                        socialMedia: socialMedia
                     });
                 }
         },

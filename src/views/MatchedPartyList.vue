@@ -7,6 +7,8 @@
             <li class="list-group-item">You matched with: {{matchedParties.pairedUser}}<span class="badge">{{matchedParties.partyDate}}</span></li>
             <li class="list-group-item">And this is his party: {{matchedParties.partyName}}<span class="badge">{{matchedParties.partyDate}}</span></li>
             <li class="list-group-item">Come to {{matchedParties.partyLocation}}<span class="badge">{{matchedParties.partyDate}}</span></li>
+            <li class="list-group-item">Social media (link/contact): <a :href="matchedParties.socialMedia">{{matchedParties.socialMedia}}</a><span class="badge">{{matchedParties.partyDate}}</span></li>
+            <img :src="matchedParties.imgURL">
         </ul>
     </div>
 </template>
@@ -38,6 +40,8 @@ export default{
                             pairedUser: data.pairedUser,
                             partyDate: data.partyDate,
                             partyLocation: data.partyLocation,
+                            socialMedia: data.socialMedia,
+                            imgURL: data.imgURL
                         })
                 }});
             });

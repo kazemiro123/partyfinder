@@ -61,10 +61,16 @@
                                     <span class="fw-500">Party Date</span><br>
                                     <input v-model="date" class="form-control input-lg" type="date" id="start" name="trip-start" min="2022-10-1" max="2023-12-31">
                                 </div>
-                            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                                <br>
+                                <div class="form-floating mb-3">
+                                    
+                                    <input v-model="socialMedia" style="margin-top:15px" class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
+                                    <label for="location"><span style="font-weight:bold">Link of your social media </span><span style="font-size:10px"> *not a required field</span></label>
+                                    <p></p>
+                                </div>
+                            <div v-if="emptyMess" class="text-center text-danger mb-3">Please fill in all fields!</div>
                             <button class="btn btn-primary btn-xl" @click.prevent="sendPartyData()" style="margin-top:20px" id="submitButton">Send</button>
                         </form>
-                                
                         <br><br><br>
                     </div>
                 </div>
@@ -89,7 +95,9 @@ export default{
             amount_50:"",
             amount_150:"",
             amount_300:"",
-            date:""
+            date:"",
+            socialMedia:"",
+            emptyMess:""
         }
     },
     methods:{
@@ -105,8 +113,11 @@ export default{
             else if(this.amount_300!=""){
                 selected_amount="300+";
             }
+            
             try {
+            if(this.party_name!=="" &&  this.party_location!=="" && this.img_url!=="" && this.date!=="" && this.party_desc!=="" && store.currentUserEmail!=="" && selected_amount!==""){
                 console.log(this.party_name,this.party_location,this.img_url,store.currentUserEmail,selected_amount)
+                
                 db.collection("party")
                     .doc()
                     .set({
@@ -116,8 +127,14 @@ export default{
                         partyDate: this.date,
                         party_desc: this.party_desc,
                         userEmail: store.currentUserEmail,
-                        selected_amount: selected_amount
+                        selected_amount: selected_amount,
+                        social_media: this.socialMedia
                     });
+                    this.$router.replace({ path:'/' });
+            }
+            else{
+                this.emptyMess=true
+            }
             }
             catch(error) {}
         }
